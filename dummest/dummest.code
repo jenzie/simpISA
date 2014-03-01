@@ -54,7 +54,6 @@ int main ( int argc, char *argv[] ) {
 
 	return( 0 );
 }
-
 ::::::::::::::
 includes.h
 ::::::::::::::
@@ -91,7 +90,6 @@ using namespace std;
 #include "prototypes.h"
 
 #endif
-
 ::::::::::::::
 globals.h
 ::::::::::::::
@@ -125,7 +123,6 @@ extern BusALU alu;        // arithmetic logic unit
 extern bool done;	  // is the simulation over?
 
 #endif
-
 ::::::::::::::
 globals.cpp
 ::::::::::::::
@@ -176,7 +173,6 @@ BusALU alu( "Adder", DATA_BITS );           // arithmetic logic unit
 //
 
 bool done ( false );		// is the simulation over?
-
 ::::::::::::::
 make_connections.cpp
 ::::::::::::::
@@ -216,7 +212,6 @@ void make_connections() {
 	pc.connectsTo( m.READ() );
 
 }
-
 ::::::::::::::
 prototypes.h
 ::::::::::::::
@@ -240,7 +235,6 @@ void make_connections();
 void run_simulation( char * );
 
 #endif
-
 ::::::::::::::
 execute.cpp
 ::::::::::::::
@@ -312,7 +306,6 @@ void execute() {
 	Clock::tick();
 
 }
-
 ::::::::::::::
 fetch_into.cpp
 ::::::::::::::
