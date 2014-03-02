@@ -232,6 +232,11 @@ void swap_mem_with_ac() {
 	ac.latchFrom(alu.OUT());
 	Clock::tick();
 
+	// Mem[MAR] <- MDR
+	// Inflow is WRITE(); write() is to specify to memory to do the operation.
+	m.WRITE().pullFrom(mdr);
+	m.write();
+
 }
 
 //
