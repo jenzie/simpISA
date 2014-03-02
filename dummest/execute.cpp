@@ -25,7 +25,7 @@ void clear_ac() {
 // load_to_ac() - load accumulator from memory address given.
 // 
 // RTL (Register Transfer Language)
-// MAR <- IR(11-0)
+// MAR <- IR[11-0]
 // MDR <- Mem[MAR]
 // AC <- MDR
 //
@@ -37,7 +37,7 @@ void load_to_ac() {
 	/*
 	Without using fetch_into().
 
-	// MAR <- IR(11-0)
+	// MAR <- IR[11-0]
 	abus.IN().pullFrom(ir); // buses are pull from
 	m.mar.IN().latchFrom(abus.OUT()); // registers are latch from; have to specify IN/OUT for buses (not storage objects, i.e. register)
 	Clock::tick();
@@ -53,7 +53,7 @@ void load_to_ac() {
 	*/
 
 	// Using fetch_into().
-	// MAR <- IR(11-0) and MDR <- Mem[MAR]
+	// MAR <- IR[11-0] and MDR <- Mem[MAR]
 	fetch_into(ir, abus, mdr);
 
 	// AC <- MDR
@@ -66,7 +66,7 @@ void load_to_ac() {
 // store_to_mem() - store accumulator to memory address given.
 //
 // RTL (Register Transfer Language)
-// MAR <- IR(11-0), MDR <- AC
+// MAR <- IR[11-0], MDR <- AC
 // Mem[MAR] <- MDR
 //
 // Code 1
@@ -74,7 +74,7 @@ void load_to_ac() {
 
 void store_to_mem() {
 
-	// MAR <- IR(11-0), MDR <- AC
+	// MAR <- IR[11-0], MDR <- AC
 	// The parallelization is simulated by the Clock::tick() for this CPU.
 	abus.IN().pullFrom(ir);
 	m.mar.IN().latchFrom(abus.OUT());
@@ -96,7 +96,7 @@ void store_to_mem() {
 //		Note that the accumulator should not be changed by this instruction.
 //
 // RTL (Register Transfer Language)
-// MAR <- IR(11-0)
+// MAR <- IR[11-0]
 // MDR <- Mem[MAR]
 // MDR <- MDR + 1
 // Mem[MAR] <- MDR
@@ -107,9 +107,8 @@ void store_to_mem() {
 
 void increment_skip_if_result_equals_zero() {
 
-	// MAR <- IR(11-0) and MDR <- Mem[MAR]
+	// MAR <- IR[11-0] and MDR <- Mem[MAR]
 	fetch_into(ir, abus, mdr);
-	Clock::tick();
 
 	// MDR <- MDR + 1
 	mdr.incr();
@@ -136,10 +135,15 @@ void increment_skip_if_result_equals_zero() {
 //
 
 void jump() {
+
+	// PC <- IR[11-0]
+	abus.IN().pullFrom(ir);
+	pc.latchFrom(abus.OUT());
+
 }
 
 //
-// halt() - halt the machine.
+// halt() - halt/stop the machine.
 //
 // RTL (Register Transfer Language)
 // null
@@ -148,6 +152,10 @@ void jump() {
 //
 
 void halt() {
+
+	cout << endl << "MACHINE HALTED due to halt instruction" << endl << endl;
+	exit();
+
 }
 
 //
@@ -155,19 +163,26 @@ void halt() {
 //		If the AC has a value of zero, branch to the address given in the instruction.
 //
 // RTL (Register Transfer Language)
-// if AC == 0 then PC <- IR(11-0)
+// if AC == 0 then PC <- IR[11-0]
 //
 // Code 5
 //
 
 void branch_if_ac_equals_zero() {
+
+	// if AC == 0 then PC <- IR[11-0]
+	if (ac.read() == 0) {
+		abus.IN().pullFrom(ir);
+		pc.latchFrom(abus.OUT);
+	}
+
 }
 
 //
 // add_to_ac() - add from memory to the accumulator.
 //
 // RTL (Register Transfer Language)
-// MAR <- IR(11-0)
+// MAR <- IR[11-0]
 // MDR <- Mem[MAR]
 // AC <- AC + MDR
 //
@@ -176,10 +191,12 @@ void branch_if_ac_equals_zero() {
 
 void add_to_ac() {
 
-	// get memory operand using address in IR[11,0]
+	// Get memory operand using address in IR[11,0].
+	// MAR <- IR[11-0] and MDR <- Mem[MAR]
 	fetch_into(ir, abus, mdr);
 
-	// set up the addition
+	// Set up the addition.
+	// AC <- AC + MDR
 	alu.OP1().pullFrom(ac);
 	alu.OP2().pullFrom(mdr);
 	ac.latchFrom(alu.OUT());
@@ -191,7 +208,7 @@ void add_to_ac() {
 // swap_mem_with_ac() - swap memory with the accumulator.
 //
 // RTL (Register Transfer Language)
-// MAR <- IR(11-0)
+// MAR <- IR[11-0]
 // MDR <- Mem[MAR]
 // AC <- MDR, MDR <- AC
 // Mem[MAR] <- MDR
@@ -200,6 +217,21 @@ void add_to_ac() {
 //
 
 void swap_mem_with_ac() {
+
+	// MAR <- IR[11-0] and MDR <- Mem[MAR]
+	fetch_into(ir, abus, mdr);
+
+	// AC <- MDR, MDR <- AC
+	// Value of AC goes to Dbus, Dbus goes to MDR.
+	dbus.IN().pullFrom(ac);
+	mdr.latchFrom(dbus.OUT());
+
+	// MDR goes to ALU, ALU does pass through op_rop2. ALU goes to AC.
+	alu.OP2().pullFrom(mdr);
+	alu.perform(BusALU::op_rop2); // ALU does not transfer data unless if there is an operation to perform.
+	ac.latchFrom(alu.OUT());
+	Clock::tick();
+
 }
 
 //
