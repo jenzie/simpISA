@@ -108,7 +108,6 @@ void increment_skip_if_result_equals_zero() {
 	// Mem[MAR] <- MDR
 	m.WRITE().pullFrom(mdr);
 	m.write();
-	Clock::tick();
 
 	// if MDR == 0 then PC <- PC + 1
 	if (mdr.value() == 0)
@@ -164,8 +163,9 @@ void branch_if_ac_equals_zero() {
 
 	// if AC == 0 then PC <- IR[11-0]
 	if (ac.value() == 0) {
-		abus.IN().pullFrom(ir);
-		pc.latchFrom(abus.OUT());
+		// abus.IN().pullFrom(ir);
+		// pc.latchFrom(abus.OUT());
+		jump();
 	}
 
 }
