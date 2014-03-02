@@ -278,7 +278,7 @@ void execute() {
 		case 8: clear_ac();  break;
 
 		default:
-			cout << "Illegal op code " << opc << endl;
+			cout << "MACHINE HALTED due to unknown op code" << opc << endl;
 			done = true;
 	}
 

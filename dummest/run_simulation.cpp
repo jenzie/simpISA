@@ -30,6 +30,13 @@ void run_simulation( char *objfile ) {
 
 		fetch_into( pc, abus, mdr );
 
+		// check for PC overflow
+		if (pc.value() == 0xfff) {
+			cout << endl << "MACHINE HALTED due to PC overflow" << endl << endl;
+			done = true;
+			break;
+		}
+
 		// bump PC for next instruction
 
 		pc.incr();
