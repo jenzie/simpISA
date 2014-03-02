@@ -98,9 +98,8 @@ void swap_mem_with_ac() {
 void execute() {
 	long opc;
 
-	// in each case, note that the last set of operations
-	// aren't actually performed until we leave the switch
-	// statement
+	// In each case, note that the last set of operations aren't actually performed 
+	// until we leave the switch statement.
 	//
 	// instr format:  opcode = bits 14:12, address = bits 11:0
 
