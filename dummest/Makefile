@@ -1,5 +1,5 @@
 #
-# Created by gmakemake (Ubuntu Sep  7 2011) on Fri Mar  8 15:38:14 2013
+# Created by gmakemake (Ubuntu Sep  7 2011) on Sun Mar  2 17:03:17 2014
 #
 
 #
@@ -43,7 +43,7 @@ COMPILE.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c
 CPP = $(CPP) $(CPPFLAGS)
 ########## Flags from header.mak
 
-BASE = /home/course/vcsg720
+BASE = /home/course/csci453
 ARCHVER = arch2-5a
 CXX = g++
 CCFLAGS = -g -I$(BASE)/include/$(ARCHVER)

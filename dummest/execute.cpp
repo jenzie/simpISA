@@ -12,16 +12,6 @@
 #include "includes.h"
 
 //
-// clear_ac() - clear the accumulator
-//
-
-void clear_ac() {
-
-	ac.clear();
-
-}
-
-//
 // load_to_ac() - load accumulator from memory address given.
 // 
 // RTL (Register Transfer Language)
@@ -39,7 +29,7 @@ void load_to_ac() {
 
 	// MAR <- IR[11-0]
 	abus.IN().pullFrom(ir); // buses are pull from
-	m.mar.IN().latchFrom(abus.OUT()); // registers are latch from; have to specify IN/OUT for buses (not storage objects, i.e. register)
+	m.MAR().latchFrom(abus.OUT()); // registers are latch from; have to specify IN/OUT for buses (not storage objects, i.e. register)
 	Clock::tick();
 	
 	// MDR <- Mem[MAR]
@@ -77,7 +67,7 @@ void store_to_mem() {
 	// MAR <- IR[11-0], MDR <- AC
 	// The parallelization is simulated by the Clock::tick() for this CPU.
 	abus.IN().pullFrom(ir);
-	m.mar.IN().latchFrom(abus.OUT());
+	m.MAR().latchFrom(abus.OUT());
 
 	dbus.IN().pullFrom(ac);
 	mdr.latchFrom(dbus.OUT());
@@ -85,7 +75,8 @@ void store_to_mem() {
 	Clock::tick();
 
 	// Mem[MAR] <- MDR
-	m.mar.IN().latchFrom(mdr);
+	m.WRITE().pullFrom(mdr);
+	m.write();
 
 }
 
@@ -115,11 +106,12 @@ void increment_skip_if_result_equals_zero() {
 	Clock::tick();
 
 	// Mem[MAR] <- MDR
-	m.mar.IN().latchFrom(mdr);
+	m.WRITE().pullFrom(mdr);
+	m.write();
 	Clock::tick();
 
 	// if MDR == 0 then PC <- PC + 1
-	if (mdr.read() == 0)
+	if (mdr.value() == 0)
 		pc.incr();
 
 }
@@ -154,7 +146,7 @@ void jump() {
 void halt() {
 
 	cout << endl << "MACHINE HALTED due to halt instruction" << endl << endl;
-	exit();
+	exit(0);
 
 }
 
@@ -171,9 +163,9 @@ void halt() {
 void branch_if_ac_equals_zero() {
 
 	// if AC == 0 then PC <- IR[11-0]
-	if (ac.read() == 0) {
+	if (ac.value() == 0) {
 		abus.IN().pullFrom(ir);
-		pc.latchFrom(abus.OUT);
+		pc.latchFrom(abus.OUT());
 	}
 
 }
@@ -240,6 +232,18 @@ void swap_mem_with_ac() {
 }
 
 //
+// clear_ac() - clear the accumulator.
+//
+// Code 8
+//
+
+void clear_ac() {
+
+	ac.clear();
+
+}
+
+//
 // execute() - decode and execute the instruction
 //
 
@@ -255,9 +259,23 @@ void execute() {
 
 	switch( opc ) {
 
-		case 0:	clear_ac();  break;
+		case 0: load_to_ac();  break;
 
-		case 1:	add_to_ac();  break;
+		case 1: store_to_mem();  break;
+
+		case 2: increment_skip_if_result_equals_zero();  break;
+
+		case 3: jump();  break;
+
+		case 4: halt();  break;
+
+		case 5: branch_if_ac_equals_zero();  break;
+
+		case 6:	add_to_ac();  break;
+
+		case 7: swap_mem_with_ac();  break;
+
+		case 8: clear_ac();  break;
 
 		default:
 			cout << "Illegal op code " << opc << endl;
