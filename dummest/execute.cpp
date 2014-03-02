@@ -259,23 +259,23 @@ void execute() {
 
 	switch( opc ) {
 
-		case 0: load_to_ac();  break;
+		case 0: load_to_ac();							 break;
 
-		case 1: store_to_mem();  break;
+		case 1: store_to_mem();							 break;
 
 		case 2: increment_skip_if_result_equals_zero();  break;
 
-		case 3: jump();  break;
+		case 3: jump();									 break;
 
-		case 4: halt();  break;
+		case 4: halt();									 break;
 
-		case 5: branch_if_ac_equals_zero();  break;
+		case 5: branch_if_ac_equals_zero();				 break;
 
-		case 6:	add_to_ac();  break;
+		case 6:	add_to_ac();							 break;
 
-		case 7: swap_mem_with_ac();  break;
+		case 7: swap_mem_with_ac();						 break;
 
-		case 8: clear_ac();  break;
+		case 8: clear_ac();								 break;
 
 		default:
 			cout << "MACHINE HALTED due to unknown op code" << opc << endl;
