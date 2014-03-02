@@ -1,5 +1,6 @@
 // execute.C
 //
+// Modified program: 	Jenny Zhen, March 2014
 // Original program:	Jim Heliotis, March 2000
 // Updates:
 //
@@ -21,7 +22,7 @@ void clear_ac() {
 }
 
 //
-// add_to_ac() - add from memory to the accumulator
+// add_to_ac() - add from memory to the accumulator.
 //
 
 void add_to_ac() {
@@ -35,6 +36,59 @@ void add_to_ac() {
 	ac.latchFrom( alu.OUT() );
 	alu.perform( BusALU::op_add );
 
+}
+
+//
+// load_to_ac() - load accumulator from memory address given.
+//
+
+void load_to_ac() {
+	
+}
+
+//
+// store_to_mem() - store accumulator to memory address given.
+//
+
+void store_to_mem() {
+}
+
+//
+// increment_skip_if_result_equals_zero() - 
+// 		increments the contents of the memory address given.
+//		If the result is zero, skip execution of the instruction following this one.
+//		Note that the accumulator should not be changed by this instruction.
+//
+
+void increment_skip_if_result_equals_zero() {
+}
+
+//
+// jump() - make the address given in the instruction the location of the next 
+//			instruction to execute.
+
+void jump() {
+}
+
+//
+// halt() - halt the machine.
+//
+
+void halt() {
+}
+
+//
+// branch_if_ac_equals_zero() - bzac; conditional branch on accumulator equal to zero.
+//		If the AC has a value of zero, branch to the address given in the instruction.
+//
+
+void branch_if_ac_equals_zero() {
+}
+
+//
+// swap_mem_with_ac() - swap memory with the accumulator.
+
+void swap_mem_with_ac() {
 }
 
 //
