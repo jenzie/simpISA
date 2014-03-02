@@ -19,8 +19,9 @@
 int main ( int argc, char *argv[] ) {
 
 	// turn on data flow tracing and memory dump after load
+	// |= performs an "or" on the value and saves it
 
-	CPUObject::debug |= CPUObject::trace | CPUObject::memload;
+	// CPUObject::debug |= CPUObject::trace | CPUObject::memload;
 
 	// make sure we've been given an object file name
 
