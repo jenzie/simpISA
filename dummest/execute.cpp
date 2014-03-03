@@ -145,7 +145,7 @@ void jump() {
 void halt() {
 
 	printf("%5s %03x   AC=%04x\n", "HALT", ir(DATA_BITS - 4, 0), ac.value());
-	cout << endl << "MACHINE HALTED due to halt instruction" << endl << endl;
+	cout << endl << "MACHINE HALTED due to halt instruction" << endl;
 	done = true;
 
 }
@@ -211,7 +211,7 @@ void add_to_ac() {
 
 void swap_mem_with_ac() {
 
-	printf("%5s %03x   AC=%04x\n", "SWP", ir(DATA_BITS - 4, 0), ac.value());
+	printf("%5s %03x   AC=%04x", "SWP", ir(DATA_BITS - 4, 0), ac.value());
 	
 	// MAR <- IR[11-0] and MDR <- Mem[MAR]
 	fetch_into(ir, abus, mdr);

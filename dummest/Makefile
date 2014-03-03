@@ -1,5 +1,5 @@
 #
-# Created by gmakemake (Ubuntu Sep  7 2011) on Sun Mar  2 17:03:17 2014
+# Created by gmakemake (Ubuntu Sep  7 2011) on Mon Mar  3 13:55:30 2014
 #
 
 #
@@ -54,7 +54,7 @@ CCLIBFLAGS = $(LIBFLAGS)
 ########## End of flags from header.mak
 
 
-CPP_FILES =	dummest.cpp execute.cpp fetch_into.cpp globals.cpp make_connections.cpp run_simulation.cpp
+CPP_FILES =	execute.cpp fetch_into.cpp globals.cpp make_connections.cpp run_simulation.cpp simpISA.cpp
 C_FILES =	
 PS_FILES =	
 S_FILES =	
@@ -67,21 +67,21 @@ OBJFILES =	execute.o fetch_into.o globals.o make_connections.o run_simulation.o
 # Main targets
 #
 
-all:	dummest 
+all:	simpISA 
 
-dummest:	dummest.o $(OBJFILES)
-	$(CXX) $(CXXFLAGS) -o dummest dummest.o $(OBJFILES) $(CCLIBFLAGS)
+simpISA:	simpISA.o $(OBJFILES)
+	$(CXX) $(CXXFLAGS) -o simpISA simpISA.o $(OBJFILES) $(CCLIBFLAGS)
 
 #
 # Dependencies
 #
 
-dummest.o:	globals.h includes.h prototypes.h
 execute.o:	globals.h includes.h prototypes.h
 fetch_into.o:	globals.h includes.h prototypes.h
 globals.o:	globals.h includes.h prototypes.h
 make_connections.o:	globals.h includes.h prototypes.h
 run_simulation.o:	globals.h includes.h prototypes.h
+simpISA.o:	globals.h includes.h prototypes.h
 
 #
 # Housekeeping
@@ -93,7 +93,7 @@ archive.tgz:	$(SOURCEFILES) Makefile
 	tar cf - $(SOURCEFILES) Makefile | gzip > archive.tgz
 
 clean:
-	-/bin/rm $(OBJFILES) dummest.o core 2> /dev/null
+	-/bin/rm $(OBJFILES) simpISA.o core 2> /dev/null
 
 realclean:        clean
-	-/bin/rm -rf dummest 
+	-/bin/rm -rf simpISA 
