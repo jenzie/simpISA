@@ -10,6 +10,7 @@
 
 // system include files
 
+#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 

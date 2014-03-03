@@ -1,5 +1,6 @@
 // run_simulation.C
 //
+// Modified program: 	Jenny Zhen, March 2014
 // Original program:	Jim Heliotis, March 2000
 // Updates:
 //
@@ -37,6 +38,9 @@ void run_simulation( char *objfile ) {
 			break;
 		}
 
+		// print the instruction's address (pc) and data (memory data register) values in hexadecimal
+		printf("%03x:  %04x = ", pc.value(), mdr.value());
+
 		// bump PC for next instruction
 
 		pc.incr();
@@ -51,6 +55,6 @@ void run_simulation( char *objfile ) {
 		// decode and execute
 
 		execute();
-
+		printf("\n");
 	}
 }

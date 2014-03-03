@@ -144,8 +144,9 @@ void jump() {
 
 void halt() {
 
+	printf("%5s %03x   AC=%04x\n", "HALT", ir(DATA_BITS - 4, 0), ac.value());
 	cout << endl << "MACHINE HALTED due to halt instruction" << endl << endl;
-	exit(0);
+	done = true;
 
 }
 
@@ -210,6 +211,8 @@ void add_to_ac() {
 
 void swap_mem_with_ac() {
 
+	printf("%5s %03x   AC=%04x\n", "SWP", ir(DATA_BITS - 4, 0), ac.value());
+	
 	// MAR <- IR[11-0] and MDR <- Mem[MAR]
 	fetch_into(ir, abus, mdr);
 
@@ -249,6 +252,7 @@ void clear_ac() {
 
 void execute() {
 	long opc;
+	const char* mnemonic;
 
 	// In each case, note that the last set of operations aren't actually performed 
 	// until we leave the switch statement.
@@ -259,28 +263,31 @@ void execute() {
 
 	switch( opc ) {
 
-		case 0: load_to_ac();							 break;
+		case 0: load_to_ac();							 mnemonic = "LOAD";		break;
 
-		case 1: store_to_mem();							 break;
+		case 1: store_to_mem();							 mnemonic = "STORE";	break;
 
-		case 2: increment_skip_if_result_equals_zero();  break;
+		case 2: increment_skip_if_result_equals_zero();  mnemonic = "ISZ";		break;
 
-		case 3: jump();									 break;
+		case 3: jump();									 mnemonic = "JUMP";		break;
 
-		case 4: halt();									 break;
+		case 4: halt();									 mnemonic = "HALT";		break;
 
-		case 5: branch_if_ac_equals_zero();				 break;
+		case 5: branch_if_ac_equals_zero();				 mnemonic = "BZAC";		break;
 
-		case 6:	add_to_ac();							 break;
+		case 6:	add_to_ac();							 mnemonic = "ADD";		break;
 
-		case 7: swap_mem_with_ac();						 break;
+		case 7: swap_mem_with_ac();						 mnemonic = "SWP";		break;
 
-		case 8: clear_ac();								 break;
+		// case 8: clear_ac();								 mnemonic = "CLEAR";	break;
 
 		default:
-			cout << "MACHINE HALTED due to unknown op code" << opc << endl;
+			cout << endl << "MACHINE HALTED due to unknown op code" << opc << endl;
 			done = true;
 	}
+
+	if (opc != 4 && opc != 7)
+		printf("%5s %03x   AC=%04x", mnemonic, ir(DATA_BITS - 4, 0), ac.value());
 
 	Clock::tick();
 
